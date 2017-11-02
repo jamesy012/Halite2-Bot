@@ -128,6 +128,7 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="hlt\hlt_in.cpp" />
     <ClCompile Include="hlt\location.cpp" />
     <ClCompile Include="hlt\map.cpp" />
     <ClCompile Include="MyBot.cpp" />

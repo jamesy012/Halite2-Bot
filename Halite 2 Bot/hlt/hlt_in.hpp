@@ -1,6 +1,7 @@
 #pragma once
 
 #include <sstream>
+#include <iostream>
 
 #include "map.hpp"
 
@@ -120,10 +121,7 @@ namespace hlt {
             return map;
         }
 
-        static const Map get_map(const int map_width, const int map_height) {
-            Log::log("--- NEW TURN ---");
-            const std::string input = get_string();
-            return parse_map(input, map_width, map_height);
-        }
+        void setup(const std::string& bot_name, int map_width, int map_height);
+        const Map get_map();
     }
 }

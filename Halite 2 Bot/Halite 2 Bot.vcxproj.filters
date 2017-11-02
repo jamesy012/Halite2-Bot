@@ -24,6 +24,9 @@
     <ClCompile Include="hlt\location.cpp">
       <Filter>Resource Files</Filter>
     </ClCompile>
+    <ClCompile Include="hlt\hlt_in.cpp">
+      <Filter>Resource Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="hlt\location.hpp">
