@@ -23,7 +23,7 @@ namespace hlt {
 
 		unsigned int m_NumberOfMyPlanets = 0;
 
-		Map(int width, int height);
+		Map(int width, int height, hlt::PlayerId a_PlayerID);
 		void maploaded();
 
 		//gets ship object from player ID and ship ID
@@ -46,6 +46,8 @@ namespace hlt {
 			double m_Distance;
 			const hlt::Ship* m_Ship;
 		};
+
+		hlt::PlayerId m_PlayerID;
 	
 		const std::vector<ShipDataStuct> getShipDataStuct(const hlt::Entity& a_Entity) const;
 	};

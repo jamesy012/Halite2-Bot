@@ -38,14 +38,14 @@ for (unsigned int q = 0; q < arraySize; q++) {								\
 namespace hlt {
 
 
-	Map::Map(const int width, const int height) : map_width(width), map_height(height) {
+	Map::Map(const int width, const int height, hlt::PlayerId a_PlayerID) : map_width(width), map_height(height),m_PlayerID(a_PlayerID){
 		
 	}
 
 	void Map::maploaded() {
 		//calc amount of ships
 		for (unsigned int i = 0; i < ship_map.size(); i++) {
-			if (i == hlt::m_PLAYERID) {
+			if (i == m_PlayerID) {
 				m_NumberOfMyShips = ship_map.at(i).size();
 				for (unsigned int q = 0; q < ship_map.at(i).size(); q++) {
 					if (ships.at(i).at(q).docking_status == hlt::ShipDockingStatus::Undocked) {
@@ -58,7 +58,7 @@ namespace hlt {
 		}
 
 		for (unsigned int i = 0; i < planets.size(); i++) {
-			if (planets[i].owner_id == hlt::m_PLAYERID) {
+			if (planets[i].owner_id == m_PlayerID) {
 				m_NumberOfMyPlanets++;
 			}
 		}
@@ -80,7 +80,7 @@ namespace hlt {
 		int index = -1;
 		//set data for distance vector
 		for (unsigned int i = 0; i < ship_map.size(); i++) {
-			if (i == hlt::m_PLAYERID) {
+			if (i == m_PlayerID) {
 				continue;
 			}
 			for (unsigned int q = 0; q < ship_map.at(i).size(); q++) {

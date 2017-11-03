@@ -81,13 +81,13 @@ namespace hlt {
             return std::make_pair(planet.entity_id, planet);
         }
 
-        static Map parse_map(const std::string& input, const int map_width, const int map_height) {
+        static Map parse_map(const std::string& input, const int map_width, const int map_height, hlt::PlayerId a_PlayerID) {
             std::stringstream iss(input);
 
             int num_players;
             iss >> num_players;
 
-            Map map = Map(map_width, map_height);
+            Map map = Map(map_width, map_height,a_PlayerID);
 
             for (int i = 0; i < num_players; ++i) {
                 PlayerId player_id;
@@ -125,6 +125,6 @@ namespace hlt {
         }
 
         void setup(const std::string& bot_name, int map_width, int map_height);
-        const Map get_map();
+        const Map get_map(hlt::PlayerId a_PlayerID);
     }
 }

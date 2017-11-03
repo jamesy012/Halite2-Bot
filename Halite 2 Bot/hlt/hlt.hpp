@@ -12,8 +12,6 @@ namespace hlt {
         const Map initial_map;
     };
 
-	static PlayerId m_PLAYERID;
-
     /// Initialize our bot with the given name, getting back some metadata.
     static Metadata initialize(const std::string& bot_name) {
         std::cout.sync_with_stdio(false);
@@ -33,7 +31,7 @@ namespace hlt {
 
         return {
                 static_cast<PlayerId>(player_id),
-                hlt::in::get_map()
+                hlt::in::get_map(player_id)
         };
     }
 }

@@ -37,9 +37,8 @@ bool attackShip(const hlt::Map& a_Map, const hlt::Ship& a_Ship, const hlt::Ship&
 }
 
 int main() {
-	const hlt::Metadata metadata = hlt::initialize("Birb the killer robot! v4");
+	const hlt::Metadata metadata = hlt::initialize("Birb the killer robot! v5");
 	const hlt::PlayerId player_id = metadata.player_id;
-	hlt::m_PLAYERID = player_id;
 
 	const hlt::Map& initial_map = metadata.initial_map;
 
@@ -56,7 +55,7 @@ int main() {
 
 	for (;;) {
 		moves.clear();
-		hlt::Map map = hlt::in::get_map();
+		hlt::Map map = hlt::in::get_map(player_id);
 
 		bool isFirstShip = true;
 		int index = -1;
@@ -96,7 +95,7 @@ int main() {
 
 				//note: we have already done the get distance too
 				if (ship.location.get_distance_to(targetShip->location) <= hlt::constants::MAX_SPEED*1.5) {
-					hlt::Log::log(std::to_string(ship.entity_id) + " Enemy close - Attacking");
+					hlt::Log::log(std::to_string(ship.entity_id) + " Enemy close - Attacking " + std::to_string(targetShip->entity_id));
 
 					if (attackShip(map, ship, *targetShip)) {
 						didAttack = true;
@@ -112,7 +111,7 @@ int main() {
 				continue;
 			}
 
-			if ((isFirstShip || index / 2 > (int) map.m_NumberOfMyUndockedShips) && (map.m_NumberOfMyUndockedShips != map.m_NumberOfMyShips || map.m_NumberOfMyPlanets == 0)) {
+			if ((index < (int) map.m_NumberOfMyUndockedShips/4) && (map.m_NumberOfMyUndockedShips != map.m_NumberOfMyShips || map.m_NumberOfMyPlanets == 0)) {
 				const hlt::Ship* targetShip = nullptr;
 				int tsIndex = 0;
 				while (targetShip == nullptr && tsIndex < shipsByDistance.size()) {
