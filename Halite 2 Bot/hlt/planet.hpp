@@ -22,6 +22,12 @@ namespace hlt {
         /// as well as docked ships.
         std::vector<EntityId> docked_ships;
 
+		unsigned int m_UnitsGettingSentTo = 0;
+
+		unsigned int m_EnemiesNearBy = 0;
+
+		unsigned int m_RequiredUnits = 0;
+
         bool is_full() const {
             return docked_ships.size() == docking_spots;
         }

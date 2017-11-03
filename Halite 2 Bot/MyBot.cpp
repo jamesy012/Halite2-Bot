@@ -5,8 +5,9 @@
 
 std::vector<hlt::Move> moves;
 
-bool dockWithPlanet(const hlt::Map& a_Map, const hlt::Ship& a_Ship, const hlt::Planet& a_Planet) {
+bool dockWithPlanet(const hlt::Map& a_Map, const hlt::Ship& a_Ship, hlt::Planet& a_Planet) {
 	if (a_Ship.can_dock(a_Planet)) {
+		a_Planet.m_UnitsGettingSentTo++;
 		moves.push_back(hlt::Move::dock(a_Ship.entity_id, a_Planet.entity_id));
 		return true;
 	}
@@ -15,6 +16,7 @@ bool dockWithPlanet(const hlt::Map& a_Map, const hlt::Ship& a_Ship, const hlt::P
 		hlt::navigation::navigate_ship_to_dock(a_Map, a_Ship, a_Planet, hlt::constants::MAX_SPEED);
 	if (move.second) {
 		moves.push_back(move.first);
+		a_Planet.m_UnitsGettingSentTo++;
 		return true;
 	}
 	return false;
@@ -25,10 +27,10 @@ bool attackShip(const hlt::Map& a_Map, const hlt::Ship& a_Ship, const hlt::Ship&
 	loc.pos_x += a_Ship.m_VelX / 2;
 	loc.pos_y += a_Ship.m_VelY / 2;
 
-	hlt::Location closestPos = a_Ship.location.get_closest_point(loc, a_Ship.radius / 2);
+	hlt::Location closestPos = a_Ship.location.get_closest_point(loc, hlt::constants::SHIP_RADIUS);
 
 	const hlt::possibly<hlt::Move> move =
-		hlt::navigation::navigate_ship_towards_target(a_Map, a_Ship, closestPos, hlt::constants::MAX_SPEED, true, hlt::constants::MAX_NAVIGATION_CORRECTIONS, M_PI / 90.0);
+		hlt::navigation::navigate_ship_towards_target(a_Map, a_Ship, closestPos, hlt::constants::MAX_SPEED, true, hlt::constants::MAX_NAVIGATION_CORRECTIONS, M_PI / 125.0);
 	if (move.second) {
 		moves.push_back(move.first);
 		return true;
@@ -36,11 +38,29 @@ bool attackShip(const hlt::Map& a_Map, const hlt::Ship& a_Ship, const hlt::Ship&
 	return false;
 }
 
+bool attackClosestShip(const hlt::Map& a_Map, const hlt::Ship& a_Ship, std::vector<const hlt::Ship*>& a_EnemyShipsByDistance) {
+	const hlt::Ship* targetShip = nullptr;
+	unsigned int tsIndex = 0;
+	while (targetShip == nullptr && tsIndex < a_EnemyShipsByDistance.size()) {
+		targetShip = a_EnemyShipsByDistance[tsIndex++];
+	}
+	if (targetShip != nullptr) {
+		hlt::Log::log(std::to_string(a_Ship.entity_id) + " ATTACKING CLOSEST SHIP");
+
+		if (attackShip(a_Map, a_Ship, *targetShip)) {
+			return true;
+		} else {
+			hlt::Log::log(std::to_string(a_Ship.entity_id) + " __ - Attacking - FAILED??");
+		}
+	}
+	return false;
+}
+
 int main() {
-	const hlt::Metadata metadata = hlt::initialize("Birb the killer robot! v5");
+	hlt::Metadata metadata = hlt::initialize("V6 Birb the killer robot!");
 	const hlt::PlayerId player_id = metadata.player_id;
 
-	const hlt::Map& initial_map = metadata.initial_map;
+	hlt::Map& initial_map = metadata.initial_map;
 
 	// We now have 1 full minute to analyse the initial map.
 	std::ostringstream initial_map_intelligence;
@@ -52,17 +72,45 @@ int main() {
 		<< "; planets: " << initial_map.planets.size();
 	hlt::Log::log(initial_map_intelligence.str());
 
+	hlt::Ship ship = initial_map.ships.at(0).at(0);
 
+	std::ostringstream planetsString;
+	planetsString
+		<< "Planets:\n";
+	for (unsigned int i = 0; i < initial_map.planets.size(); i++) {
+		hlt::Planet planet = initial_map.planets[i];
+		planetsString << "ID: " << planet.entity_id <<
+			"; C-production: " << planet.current_production <<
+			"; R-production: " << planet.remaining_production <<
+			"; radius: " << planet.radius <<
+			"; distance: " << ship.location.get_distance_to(planet.location) <<
+			"; calc: " << ship.location.get_distance_to(planet.location) / planet.radius <<
+			"\n";
+	}
+	hlt::Log::log(planetsString.str());
+	hlt::Map& map = initial_map;
+	int firstShipID = -1;
 	for (;;) {
 		moves.clear();
-		hlt::Map map = hlt::in::get_map(player_id);
+		map = hlt::in::get_map(player_id, &map);
 
-		bool isFirstShip = true;
+
 		int index = -1;
 		for (const hlt::Ship& ship : map.ships.at(player_id)) {
-			std::vector<const hlt::Ship*> shipsByDistance = map.getEnemyShipsByDistance(ship);
+			//hlt::Log::log(std::to_string(ship.entity_id) + " vel X " + std::to_string(ship.m_VelX) + " vel Y " + std::to_string(ship.m_VelY));
+
+
+			if (firstShipID == -1) {
+				firstShipID = ship.entity_id;
+			}
+
+			std::vector<const hlt::Ship*> enemyShipsByDistance = map.getEnemyShipsByDistance(ship);
 
 			if (ship.docking_status != hlt::ShipDockingStatus::Undocked) {
+				hlt::Log::log(std::to_string(ship.entity_id) + ": IS DOCKED");
+
+				//update the m_UnitsGettingSentTo to include docked units
+				map.get_planet(ship.docked_planet).m_UnitsGettingSentTo++;
 				continue;
 				/*
 				//This just seems detrimental to the bot
@@ -71,7 +119,7 @@ int main() {
 					continue;
 				}
 
-				const hlt::Ship* targetShip = shipsByDistance[0];
+				const hlt::Ship* targetShip = enemyShipsByDistance[0];
 
 				//note: we have already done the get distance too
 				if (ship.location.get_distance_to(targetShip->location) <= 10) {
@@ -86,19 +134,36 @@ int main() {
 			index++;
 
 
-			bool didAttack = false;
-			for (unsigned int i = 0; i < fmin(10u, shipsByDistance.size()); i++) {
-				if (shipsByDistance[i] == nullptr) {
+
+			bool didMove = false;
+			for (unsigned int i = 0; i < fmin(10u, enemyShipsByDistance.size()); i++) {
+				if (enemyShipsByDistance[i] == nullptr) {
+					hlt::Log::log(std::to_string(ship.entity_id) + " shipsByDistance[i] == nullptr ");
 					continue;
 				}
-				const hlt::Ship* targetShip = shipsByDistance[i];
+				const hlt::Ship* targetShip = enemyShipsByDistance[i];
 
-				//note: we have already done the get distance too
-				if (ship.location.get_distance_to(targetShip->location) <= hlt::constants::MAX_SPEED*1.5) {
+				//move to firendly units if they are close, for assistance. currently broken
+				/*
+				std::vector<const hlt::Ship*> friendlyShipsByDistance = map.getFriendlyShipsByDistance(ship);
+				if (friendlyShipsByDistance[0] != nullptr) {
+					double dist = ship.location.get_distance_to(friendlyShipsByDistance[0]->location);
+					if (dist >= hlt::constants::MAX_SPEED / 2 && dist <= hlt::constants::MAX_SPEED*3) {
+						attackShip(map, ship, *friendlyShipsByDistance[0]);
+						didMove = true;
+						break;
+					}
+				}
+				*/
+
+				//note: we have already done the get distance to object
+				if (ship.location.get_distance_to(targetShip->location) <= hlt::constants::MAX_SPEED*2.6) {
 					hlt::Log::log(std::to_string(ship.entity_id) + " Enemy close - Attacking " + std::to_string(targetShip->entity_id));
 
 					if (attackShip(map, ship, *targetShip)) {
-						didAttack = true;
+						hlt::Log::log(std::to_string(ship.entity_id) + ": CLOSE SHIP ATTACK");
+
+						didMove = true;
 						break;
 					} else {
 						hlt::Log::log(std::to_string(ship.entity_id) + " Enemy close - Attacking - FAILED??");
@@ -107,45 +172,55 @@ int main() {
 					break;
 				}
 			}
-			if (didAttack) {
+			if (didMove) {
 				continue;
 			}
 
-			if ((index < (int) map.m_NumberOfMyUndockedShips/4) && (map.m_NumberOfMyUndockedShips != map.m_NumberOfMyShips || map.m_NumberOfMyPlanets == 0)) {
-				const hlt::Ship* targetShip = nullptr;
-				int tsIndex = 0;
-				while (targetShip == nullptr && tsIndex < shipsByDistance.size()) {
-					targetShip = shipsByDistance[tsIndex++];
-				}
-				if (targetShip != nullptr) {
-					hlt::Log::log(std::to_string(ship.entity_id) + (isFirstShip ? " First ship - Attacking " : " Index above docked unit count - Attacking"));
+			if ((/*ship.entity_id == firstShipID ||*/ index > ((int) map.m_NumberOfMyUndockedShips)*0.8) && (map.m_NumberOfMyUndockedShips != map.m_NumberOfMyShips || map.m_NumberOfMyPlanets == 0)) {
+				if (attackClosestShip(map, ship, enemyShipsByDistance)) {
+					hlt::Log::log(std::to_string(ship.entity_id) + ": INDEX ATTACK");
 
-					isFirstShip = false;
-					if (attackShip(map, ship, *targetShip)) {
-						continue;
-					} else {
-						hlt::Log::log(std::to_string(ship.entity_id) + " __ - Attacking - FAILED??");
-					}
+					continue;
 				}
 			}
 
-			std::vector<const hlt::Planet*> planetsByDistance = map.getPlanetsByDistance(ship);
+			std::vector<hlt::Planet*> planetsByDistance = map.getPlanetsByDistance(ship);
 
-			for (const hlt::Planet* planet : planetsByDistance) {
+			for (hlt::Planet* planet : planetsByDistance) {
 				if (planet->owned) {
 
 					if (planet->owner_id == player_id) {
+						/*
+						if (planet->m_UnitsGettingSentTo >= planet->m_RequiredUnits) {
+							hlt::Log::log(std::to_string(ship.entity_id) + ": MOVE TO PLANET " + std::to_string(planet->entity_id)+" - NEEDS REINFORCEMENTS OR HAS DOCK SPOTS");
+
+							dockWithPlanet(map, ship, *planet);
+							break;
+						}
+						*/
+
 						if (!planet->is_full()) {
+							if (planet->m_UnitsGettingSentTo >= planet->m_RequiredUnits) {
+								hlt::Log::log(std::to_string(ship.entity_id) + ": DOCK FULL MOVING ELSEWHERE " + std::to_string(planet->entity_id));
+								continue;
+							}
+
 							if (dockWithPlanet(map, ship, *planet)) {
+								hlt::Log::log(std::to_string(ship.entity_id) + ": DOCK FRIENDLY " + std::to_string(planet->entity_id));
+
 								break;
 							} else {
-								hlt::Log::log(std::to_string(ship.entity_id) + ": Unable to dock will unfull planet");
+								hlt::Log::log(std::to_string(ship.entity_id) + ": Unable to dock will unfull planet " + std::to_string(planet->entity_id));
 							}
 						}
 						continue;
 					} else {
 						if (planet->docked_ships.size() != 0) {
 							if (attackShip(map, ship, map.get_ship(planet->owner_id, planet->docked_ships[0]))) {
+								hlt::Log::log(std::to_string(ship.entity_id) + ": Planet Attack Docked");
+								hlt::Log::log(std::to_string(ship.entity_id) + ": - Planet " + std::to_string(planet->entity_id));
+								hlt::Log::log(std::to_string(ship.entity_id) + ": - Ship " + std::to_string(planet->docked_ships[0]));
+
 							} else {
 								continue;
 							}
@@ -160,12 +235,51 @@ int main() {
 						}
 					}
 				}
-
+				hlt::Log::log(std::to_string(ship.entity_id) + ": DOCK EMPTY " + std::to_string(planet->entity_id));
 				dockWithPlanet(map, ship, *planet);
-
 				break;
 			}
+
+			//if all else fails, attack the closest enemy ship
+			if (moves.size() != 0 && moves[moves.size() - 1].ship_id != ship.entity_id) {
+				if (attackClosestShip(map, ship, enemyShipsByDistance)) {
+
+				} else {
+					hlt::Log::log(std::to_string(ship.entity_id) + ": HAD NO MOVES!");
+
+				}
+			}
+
 		}
+		//hlt::Log::log("math check: " + std::to_string(index) + " - " + std::to_string(((int) map.m_NumberOfMyUndockedShips - 1)*0.8));
+		/*
+		hlt::Log::log("moves: " + std::to_string(moves.size()) + " ships " + std::to_string(map.m_NumberOfMyUndockedShips));
+		for (int i = 0; i < moves.size(); i++) {
+			//hlt::Ship thisShip= map.get_ship(player_id,moves[i].ship_id);
+			hlt::Move& move = moves[i];
+			std::ostringstream string;
+			string
+				<< "MOVES- Ship:\n";
+			string << "ID: " << move.ship_id;
+				switch (move.type) {
+					case hlt::MoveType::Dock:
+						string << "Move Type: Dock ";
+						break;
+					case hlt::MoveType::Noop:
+						string << "Move Type: Noop ";
+						break;
+					case hlt::MoveType::Undock:
+						string << "Move Type: Undock ";
+						break;
+					case hlt::MoveType::Thrust:
+						string << "Move Type: Thrust ";
+						break;
+				}
+
+			hlt::Log::log(string.str());
+		}
+		*/
+
 
 		if (!hlt::out::send_moves(moves)) {
 			hlt::Log::log("send_moves failed; exiting");

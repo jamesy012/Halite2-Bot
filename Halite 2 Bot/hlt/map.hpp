@@ -34,7 +34,8 @@ namespace hlt {
 
 		//returns 
 		const std::vector<const hlt::Ship*> getEnemyShipsByDistance(const hlt::Entity& a_Entity) const;
-		const std::vector<const hlt::Planet*> getPlanetsByDistance(const hlt::Entity& a_Entity) const;
+		const std::vector<const hlt::Ship*> getFriendlyShipsByDistance(const hlt::Entity& a_Entity) const;
+		const std::vector<hlt::Planet*> getPlanetsByDistance(const hlt::Entity& a_Entity);
 
 
 		const unsigned int getNumOfEnemyShips() const;
@@ -47,8 +48,14 @@ namespace hlt {
 			const hlt::Ship* m_Ship;
 		};
 
+		enum OwnerSelectionType {
+			All,
+			Friendly,
+			Enemy,
+		};
+
 		hlt::PlayerId m_PlayerID;
 	
-		const std::vector<ShipDataStuct> getShipDataStuct(const hlt::Entity& a_Entity) const;
+		const std::vector<ShipDataStuct> getShipDataStuct(const hlt::Entity& a_Entity,const OwnerSelectionType a_Type,const bool a_IncludeDocked) const;
 	};
 }

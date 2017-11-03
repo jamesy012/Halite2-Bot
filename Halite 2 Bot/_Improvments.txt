@@ -8,8 +8,28 @@ Improvments to make:
 
 -	attack near by enemy ships (!DONE)
 
--	only send enough ships to an area that it needs
-	-	say 4 enemys docked to a planet, 3 more enemies nearby that can dock 5, then send 4+5+(3+1*2) == docked+dock_Spots+((enemysNearby-docked+1)*2)
+-	only send enough ships to an area that it needs (!ONLY DONE FOR DOCKING SPOTS)
+	-	say 4 enemys docked to a planet, 3 more enemies nearby that can dock 5, then send (5-4)+(3+1*2) == (dock_Spots-docked)+((enemysNearby-docked+1)*2) (!RATIO VALUE IN map.cpp)
 
 -	look to see if there are more undocked enemies nearby
-	- if there are, flee and call for help
+	-	if there are, flee and call for help
+
+-	after a certain amount of ships, have them always stick in groups of a few
+	-	should should mean we would win the small fights more often
+
+-	notice when a planet has lots of enemys near by and send some backup there
+
+-	create a general priority map and ships create their own, then ships look at this to work out where they are needed
+	-	docked unit getting attack
+	-	friendly has near by enemies
+	-	lots of enemies grouped up
+	-	a few planets grouped up is better then 1 big planet
+
+-	focus on attacking undocked units first, since they can hurt us
+
+-	if the enemy has lots of units grouped up, dont attack with one unit
+
+-	when docking dont put all the ships in the same area, spread it out alittle
+
+-	improve logging
+

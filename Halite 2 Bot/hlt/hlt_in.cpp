@@ -15,7 +15,7 @@ namespace hlt {
             g_map_height = map_height;
         }
 
-        const Map get_map(hlt::PlayerId a_PlayerID) {
+        const Map get_map(hlt::PlayerId a_PlayerID, Map* a_Map) {
             if (g_turn == 1) {
                 out::send_string(g_bot_name);
             }
@@ -34,7 +34,7 @@ namespace hlt {
             }
             ++g_turn;
 
-            return parse_map(input, g_map_width, g_map_height, a_PlayerID);
+            return parse_map(input, g_map_width, g_map_height, a_PlayerID, a_Map);
         }
     }
 }
