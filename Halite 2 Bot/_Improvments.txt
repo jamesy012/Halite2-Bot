@@ -1,0 +1,15 @@
+Improvments to make:
+-	COMMENTS
+
+-	getting my army killed by one unit at the start
+	-	Also while playing, one unit can take my planet (!FIXED - if a new unit is spawned close enough)
+
+-	sometimes when attacking the first planet 2 ships crash into eachother
+
+-	attack near by enemy ships (!DONE)
+
+-	only send enough ships to an area that it needs
+	-	say 4 enemys docked to a planet, 3 more enemies nearby that can dock 5, then send 4+5+(3+1*2) == docked+dock_Spots+((enemysNearby-docked+1)*2)
+
+-	look to see if there are more undocked enemies nearby
+	- if there are, flee and call for help

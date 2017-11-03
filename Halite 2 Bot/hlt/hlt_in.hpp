@@ -22,9 +22,11 @@ namespace hlt {
             iss >> ship.health;
 
             // No longer in the game, but still part of protocol.
-            double vel_x_deprecated, vel_y_deprecated;
-            iss >> vel_x_deprecated;
-            iss >> vel_y_deprecated;
+            //double vel_x_deprecated, vel_y_deprecated;
+            //iss >> vel_x_deprecated;
+            //iss >> vel_y_deprecated;
+			iss >> ship.m_VelX;
+			iss >> ship.m_VelY;
 
             int docking_status;
             iss >> docking_status;
@@ -118,6 +120,7 @@ namespace hlt {
                 map.planet_map[planet_pair.first] = i;
             }
 
+			map.maploaded();
             return map;
         }
 

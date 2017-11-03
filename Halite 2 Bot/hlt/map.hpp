@@ -16,36 +16,37 @@ namespace hlt {
 		std::vector<Planet> planets;
 		entity_map<unsigned int> planet_map;
 
+
+		unsigned int m_NumberOfEnemyShips = 0;
+		unsigned int m_NumberOfMyShips = 0;
+		unsigned int m_NumberOfMyUndockedShips = 0;
+
+		unsigned int m_NumberOfMyPlanets = 0;
+
 		Map(int width, int height);
+		void maploaded();
 
-		const Ship& get_ship(const PlayerId player_id, const EntityId ship_id) const {
-			return ships.at(player_id).at(ship_map.at(player_id).at(ship_id));
-		}
+		//gets ship object from player ID and ship ID
+		Ship& get_ship(PlayerId player_id, EntityId ship_id);
 
-		const Planet& get_planet(const EntityId planet_id) const {
-			return planets.at(planet_map.at(planet_id));
-		}
+		//gets planet object from planet ID
+		Planet& get_planet(EntityId planet_id);
+
+		//returns 
+		const std::vector<const hlt::Ship*> getEnemyShipsByDistance(const hlt::Entity& a_Entity) const;
+		const std::vector<const hlt::Planet*> getPlanetsByDistance(const hlt::Entity& a_Entity) const;
 
 
-		const std::vector<const hlt::Planet*> getPlanetsByDistance(const hlt::Location a_Position) const {
-			std::vector<double> distances = std::vector<double>(planets.size());
-			for (unsigned int i = 0; i < planets.size(); i++) {
-				distances[i] = a_Position.get_distance_to(planets[i].location);
-			}
-			std::vector<const hlt::Planet*> planetsSorted = std::vector<const hlt::Planet*>(planets.size());
-			for (unsigned int q = 0; q < planets.size(); q++) {
-				int index = -1;
-				double smallest = 9999;
-				for (unsigned int i = 0; i < distances.size(); i++) {
-					if (distances[i] < smallest) {
-						smallest = distances[i];
-						index = i;
-					}
-				}
-				planetsSorted[q] = &planets[index];
-				distances[index] = 9999;
-			}
-			return planetsSorted;
-		}
+		const unsigned int getNumOfEnemyShips() const;
+		const unsigned int getNumOfMyShips() const;
+	protected:
+		
+	private:
+		struct ShipDataStuct {
+			double m_Distance;
+			const hlt::Ship* m_Ship;
+		};
+	
+		const std::vector<ShipDataStuct> getShipDataStuct(const hlt::Entity& a_Entity) const;
 	};
 }

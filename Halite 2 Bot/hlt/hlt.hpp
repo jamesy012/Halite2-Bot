@@ -12,6 +12,8 @@ namespace hlt {
         const Map initial_map;
     };
 
+	static PlayerId m_PLAYERID;
+
     /// Initialize our bot with the given name, getting back some metadata.
     static Metadata initialize(const std::string& bot_name) {
         std::cout.sync_with_stdio(false);

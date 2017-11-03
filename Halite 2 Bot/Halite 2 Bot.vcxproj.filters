@@ -13,66 +13,74 @@
       <UniqueIdentifier>{67DA6AB6-F800-4c08-8B7A-83BB121AAD01}</UniqueIdentifier>
       <Extensions>rc;ico;cur;bmp;dlg;rc2;rct;bin;rgs;gif;jpg;jpeg;jpe;resx;tiff;tif;png;wav;mfcribbon-ms</Extensions>
     </Filter>
+    <Filter Include="HLT">
+      <UniqueIdentifier>{04b617f8-a9e0-4847-bf67-7f42ee499317}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="MyBot.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="hlt\map.cpp">
-      <Filter>Resource Files</Filter>
+    <ClCompile Include="hlt\hlt_in.cpp">
+      <Filter>HLT</Filter>
     </ClCompile>
     <ClCompile Include="hlt\location.cpp">
-      <Filter>Resource Files</Filter>
+      <Filter>HLT</Filter>
     </ClCompile>
-    <ClCompile Include="hlt\hlt_in.cpp">
-      <Filter>Resource Files</Filter>
+    <ClCompile Include="hlt\map.cpp">
+      <Filter>HLT</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="hlt\location.hpp">
-      <Filter>Resource Files</Filter>
-    </ClInclude>
-    <ClInclude Include="hlt\log.hpp">
-      <Filter>Resource Files</Filter>
-    </ClInclude>
-    <ClInclude Include="hlt\map.hpp">
-      <Filter>Resource Files</Filter>
-    </ClInclude>
-    <ClInclude Include="hlt\move.hpp">
-      <Filter>Resource Files</Filter>
-    </ClInclude>
-    <ClInclude Include="hlt\navigation.hpp">
-      <Filter>Resource Files</Filter>
-    </ClInclude>
-    <ClInclude Include="hlt\planet.hpp">
-      <Filter>Resource Files</Filter>
-    </ClInclude>
-    <ClInclude Include="hlt\ship.hpp">
-      <Filter>Resource Files</Filter>
-    </ClInclude>
-    <ClInclude Include="hlt\types.hpp">
-      <Filter>Resource Files</Filter>
-    </ClInclude>
-    <ClInclude Include="hlt\util.hpp">
-      <Filter>Resource Files</Filter>
-    </ClInclude>
     <ClInclude Include="hlt\collision.hpp">
-      <Filter>Resource Files</Filter>
+      <Filter>HLT</Filter>
     </ClInclude>
     <ClInclude Include="hlt\constants.hpp">
-      <Filter>Resource Files</Filter>
+      <Filter>HLT</Filter>
     </ClInclude>
     <ClInclude Include="hlt\entity.hpp">
-      <Filter>Resource Files</Filter>
+      <Filter>HLT</Filter>
     </ClInclude>
     <ClInclude Include="hlt\hlt.hpp">
-      <Filter>Resource Files</Filter>
+      <Filter>HLT</Filter>
     </ClInclude>
     <ClInclude Include="hlt\hlt_in.hpp">
-      <Filter>Resource Files</Filter>
+      <Filter>HLT</Filter>
     </ClInclude>
     <ClInclude Include="hlt\hlt_out.hpp">
-      <Filter>Resource Files</Filter>
+      <Filter>HLT</Filter>
     </ClInclude>
+    <ClInclude Include="hlt\location.hpp">
+      <Filter>HLT</Filter>
+    </ClInclude>
+    <ClInclude Include="hlt\log.hpp">
+      <Filter>HLT</Filter>
+    </ClInclude>
+    <ClInclude Include="hlt\map.hpp">
+      <Filter>HLT</Filter>
+    </ClInclude>
+    <ClInclude Include="hlt\move.hpp">
+      <Filter>HLT</Filter>
+    </ClInclude>
+    <ClInclude Include="hlt\navigation.hpp">
+      <Filter>HLT</Filter>
+    </ClInclude>
+    <ClInclude Include="hlt\planet.hpp">
+      <Filter>HLT</Filter>
+    </ClInclude>
+    <ClInclude Include="hlt\ship.hpp">
+      <Filter>HLT</Filter>
+    </ClInclude>
+    <ClInclude Include="hlt\types.hpp">
+      <Filter>HLT</Filter>
+    </ClInclude>
+    <ClInclude Include="hlt\util.hpp">
+      <Filter>HLT</Filter>
+    </ClInclude>
+  </ItemGroup>
+  <ItemGroup>
+    <Text Include="_Improvments.txt">
+      <Filter>Resource Files</Filter>
+    </Text>
   </ItemGroup>
 </Project>

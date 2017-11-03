@@ -150,6 +150,9 @@
     <ClInclude Include="hlt\types.hpp" />
     <ClInclude Include="hlt\util.hpp" />
   </ItemGroup>
+  <ItemGroup>
+    <Text Include="_Improvments.txt" />
+  </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
   </ImportGroup>
