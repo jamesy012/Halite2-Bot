@@ -2,6 +2,9 @@
 #include "hlt/navigation.hpp"
 
 #include <cmath>
+#include <chrono>
+
+#include "Vector2.h"
 
 std::vector<hlt::Move> moves;
 
@@ -24,8 +27,8 @@ bool dockWithPlanet(const hlt::Map& a_Map, const hlt::Ship& a_Ship, hlt::Planet&
 
 bool attackShip(const hlt::Map& a_Map, const hlt::Ship& a_Ship, const hlt::Ship& a_Target) {
 	hlt::Location loc = a_Target.location;
-	loc.pos_x += a_Ship.m_VelX / 2;
-	loc.pos_y += a_Ship.m_VelY / 2;
+	loc.m_Pos.m_X += a_Ship.m_VelX / 2;
+	loc.m_Pos.m_Y += a_Ship.m_VelY / 2;
 
 	hlt::Location closestPos = a_Ship.location.get_closest_point(loc, hlt::constants::SHIP_RADIUS);
 
@@ -57,7 +60,7 @@ bool attackClosestShip(const hlt::Map& a_Map, const hlt::Ship& a_Ship, std::vect
 }
 
 int main() {
-	hlt::Metadata metadata = hlt::initialize("V6 Birb the killer robot!");
+	hlt::Metadata metadata = hlt::initialize("V7 Birb the killer robot!");
 	const hlt::PlayerId player_id = metadata.player_id;
 
 	hlt::Map& initial_map = metadata.initial_map;
@@ -88,21 +91,20 @@ int main() {
 			"\n";
 	}
 	hlt::Log::log(planetsString.str());
+
 	hlt::Map& map = initial_map;
-	int firstShipID = -1;
+
+	int turnCount = 0;
 	for (;;) {
+		std::chrono::steady_clock::time_point t1;
+		turnCount++;
+
 		moves.clear();
-		map = hlt::in::get_map(player_id, &map);
+		map = hlt::in::get_map(player_id, &map, &t1);
 
-
-		int index = -1;
+		int useableShipCountindex = -1;
 		for (const hlt::Ship& ship : map.ships.at(player_id)) {
 			//hlt::Log::log(std::to_string(ship.entity_id) + " vel X " + std::to_string(ship.m_VelX) + " vel Y " + std::to_string(ship.m_VelY));
-
-
-			if (firstShipID == -1) {
-				firstShipID = ship.entity_id;
-			}
 
 			std::vector<const hlt::Ship*> enemyShipsByDistance = map.getEnemyShipsByDistance(ship);
 
@@ -131,7 +133,7 @@ int main() {
 				continue;
 				*/
 			}
-			index++;
+			useableShipCountindex++;
 
 
 
@@ -176,7 +178,7 @@ int main() {
 				continue;
 			}
 
-			if ((/*ship.entity_id == firstShipID ||*/ index > ((int) map.m_NumberOfMyUndockedShips)*0.8) && (map.m_NumberOfMyUndockedShips != map.m_NumberOfMyShips || map.m_NumberOfMyPlanets == 0)) {
+			if ((useableShipCountindex > ((int) map.m_NumberOfMyUndockedShips)*0.65) && (map.m_NumberOfMyUndockedShips != map.m_NumberOfMyShips || map.m_NumberOfMyPlanets == 0)) {
 				if (attackClosestShip(map, ship, enemyShipsByDistance)) {
 					hlt::Log::log(std::to_string(ship.entity_id) + ": INDEX ATTACK");
 
@@ -251,7 +253,7 @@ int main() {
 			}
 
 		}
-		//hlt::Log::log("math check: " + std::to_string(index) + " - " + std::to_string(((int) map.m_NumberOfMyUndockedShips - 1)*0.8));
+		//hlt::Log::log("math check: " + std::to_string(useableShipCountindex) + " - " + std::to_string(((int) map.m_NumberOfMyUndockedShips - 1)*0.8));
 		/*
 		hlt::Log::log("moves: " + std::to_string(moves.size()) + " ships " + std::to_string(map.m_NumberOfMyUndockedShips));
 		for (int i = 0; i < moves.size(); i++) {
@@ -285,5 +287,10 @@ int main() {
 			hlt::Log::log("send_moves failed; exiting");
 			break;
 		}
+
+		//timer info
+		auto t2 = std::chrono::high_resolution_clock::now();
+		auto diff = std::chrono::duration_cast<std::chrono::duration<double>>(t2 - t1);
+		hlt::Log::log("Turn Time: " + std::to_string(1000 * diff.count()));
 	}
 }

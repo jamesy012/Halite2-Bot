@@ -1,6 +1,8 @@
 Improvments to make:
 -	COMMENTS
 
+-	improve logging
+
 -	getting my army killed by one unit at the start
 	-	Also while playing, one unit can take my planet (!FIXED - if a new unit is spawned close enough)
 
@@ -31,5 +33,4 @@ Improvments to make:
 
 -	when docking dont put all the ships in the same area, spread it out alittle
 
--	improve logging
-
+-	When moving ships, check to see if there will be a ship in that location by checking the moves

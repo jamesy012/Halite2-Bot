@@ -5,6 +5,8 @@
 #include "move.hpp"
 #include "util.hpp"
 
+#include "../Vector2.h"
+
 namespace hlt {
     namespace navigation {
         static void check_and_add_entity_between(
@@ -57,7 +59,7 @@ namespace hlt {
             if (avoid_obstacles && !objects_between(map, ship.location, target).empty()) {
                 const double new_target_dx = cos(angle_rad + angular_step_rad) * distance;
                 const double new_target_dy = sin(angle_rad + angular_step_rad) * distance;
-                const Location new_target = { ship.location.pos_x + new_target_dx, ship.location.pos_y + new_target_dy };
+                const Location new_target = {Vector2(ship.location.m_Pos.m_X + new_target_dx, ship.location.m_Pos.m_Y + new_target_dy) };
 
                 return navigate_ship_towards_target(
                         map, ship, new_target, max_thrust, true, (max_corrections - 1), angular_step_rad);
@@ -72,6 +74,17 @@ namespace hlt {
             }
 
             const int angle_deg = util::angle_rad_to_deg_clipped(angle_rad);
+
+			//calculating the postion this object will be after this turn
+			/*
+			Vector2 direction = Vector2(target.m_Pos.m_X - ship.location.m_Pos.m_X, target.m_Pos.m_Y - ship.location.m_Pos.m_Y);
+			direction.normalize();
+			direction *= thrust;
+			Vector2 posNextTurn = ship.location.m_Pos;
+			posNextTurn+=direction;
+
+			Log::log("Move prediction: " + std::to_string(ship.entity_id) + " " + std::string(ship.location.m_Pos) + " " + std::string(posNextTurn) + " " + std::string(direction));
+			*/
 
             return { Move::thrust(ship.entity_id, thrust, angle_deg), true };
         }

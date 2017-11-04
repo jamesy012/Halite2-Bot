@@ -31,7 +31,7 @@ namespace hlt {
 
 		return {
 				static_cast<PlayerId>(player_id),
-				hlt::in::get_map(player_id,nullptr)
+				hlt::in::get_map(player_id,nullptr,nullptr)
         };
     }
 }

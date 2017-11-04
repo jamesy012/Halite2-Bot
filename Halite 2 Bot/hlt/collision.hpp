@@ -30,12 +30,12 @@ namespace hlt {
             // and substitute into the equation of a circle
             // Solve for t
             const double circle_radius = circle.radius;
-            const double start_x = start.pos_x;
-            const double start_y = start.pos_y;
-            const double end_x = end.pos_x;
-            const double end_y = end.pos_y;
-            const double center_x = circle.location.pos_x;
-            const double center_y = circle.location.pos_y;
+            const double start_x = start.m_Pos.m_X;
+            const double start_y = start.m_Pos.m_Y;
+            const double end_x = end.m_Pos.m_X;
+            const double end_y = end.m_Pos.m_Y;
+            const double center_x = circle.location.m_Pos.m_X;
+            const double center_y = circle.location.m_Pos.m_Y;
             const double dx = end_x - start_x;
             const double dy = end_y - start_y;
 
@@ -60,7 +60,7 @@ namespace hlt {
 
             const double closest_x = start_x + dx * t;
             const double closest_y = start_y + dy * t;
-            const double closest_distance = Location{ closest_x, closest_y }.get_distance_to(circle.location);
+            const double closest_distance = Location{ Vector2(closest_x, closest_y) }.get_distance_to(circle.location);
 
             return closest_distance <= circle_radius + fudge;
         }

@@ -30,6 +30,9 @@
     <ClCompile Include="hlt\map.cpp">
       <Filter>HLT</Filter>
     </ClCompile>
+    <ClCompile Include="Vector2.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="hlt\collision.hpp">
@@ -76,6 +79,9 @@
     </ClInclude>
     <ClInclude Include="hlt\util.hpp">
       <Filter>HLT</Filter>
+    </ClInclude>
+    <ClInclude Include="Vector2.h">
+      <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

@@ -5,6 +5,8 @@
 #include "log.hpp"
 #include "map.hpp"
 
+#include <chrono>
+
 namespace hlt {
 	namespace in {
 		static std::string get_string() {
@@ -17,8 +19,8 @@ namespace hlt {
 			Ship ship;
 
 			iss >> ship.entity_id;
-			iss >> ship.location.pos_x;
-			iss >> ship.location.pos_y;
+			iss >> ship.location.m_Pos.m_X;
+			iss >> ship.location.m_Pos.m_Y;
 			iss >> ship.health;
 
 			// No longer in the game, but still part of protocol.
@@ -55,8 +57,8 @@ namespace hlt {
 						if (thisShipLastTurn == nullptr) {
 							ship.m_VelX = ship.m_VelY = 0;
 						} else {
-							ship.m_VelX = ship.location.pos_x - thisShipLastTurn->location.pos_x;
-							ship.m_VelY = ship.location.pos_y - thisShipLastTurn->location.pos_y;
+							ship.m_VelX = ship.location.m_Pos.m_X - thisShipLastTurn->location.m_Pos.m_X;
+							ship.m_VelY = ship.location.m_Pos.m_Y - thisShipLastTurn->location.m_Pos.m_Y;
 
 							hlt::Log::log("vel y " + std::to_string(ship.m_VelX));
 							hlt::Log::log("vel x " + std::to_string(ship.m_VelY));
@@ -77,8 +79,8 @@ namespace hlt {
 			Planet planet;
 
 			iss >> planet.entity_id;
-			iss >> planet.location.pos_x;
-			iss >> planet.location.pos_y;
+			iss >> planet.location.m_Pos.m_X;
+			iss >> planet.location.m_Pos.m_Y;
 			iss >> planet.health;
 			iss >> planet.radius;
 			iss >> planet.docking_spots;
@@ -156,6 +158,6 @@ namespace hlt {
 		}
 
 		void setup(const std::string& bot_name, int map_width, int map_height);
-		const Map get_map(hlt::PlayerId a_PlayerID, Map* a_Map);
+		const Map get_map(hlt::PlayerId a_PlayerID, Map* a_Map, std::chrono::steady_clock::time_point* a_TimeStart);
 	}
 }

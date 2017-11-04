@@ -132,6 +132,7 @@
     <ClCompile Include="hlt\location.cpp" />
     <ClCompile Include="hlt\map.cpp" />
     <ClCompile Include="MyBot.cpp" />
+    <ClCompile Include="Vector2.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="hlt\collision.hpp" />
@@ -149,6 +150,7 @@
     <ClInclude Include="hlt\ship.hpp" />
     <ClInclude Include="hlt\types.hpp" />
     <ClInclude Include="hlt\util.hpp" />
+    <ClInclude Include="Vector2.h" />
   </ItemGroup>
   <ItemGroup>
     <Text Include="_Improvments.txt" />
