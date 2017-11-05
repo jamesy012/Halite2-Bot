@@ -6,7 +6,7 @@ Improvments to make:
 -	getting my army killed by one unit at the start
 	-	Also while playing, one unit can take my planet (!FIXED - if a new unit is spawned close enough)
 
--	sometimes when attacking the first planet 2 ships crash into eachother
+-	sometimes when attacking the first planet 2 ships crash into eachother (!FIXED - mostly for when we have 20 undocked units or less)
 
 -	attack near by enemy ships (!DONE)
 
@@ -34,3 +34,5 @@ Improvments to make:
 -	when docking dont put all the ships in the same area, spread it out alittle
 
 -	When moving ships, check to see if there will be a ship in that location by checking the moves
+
+-	a*

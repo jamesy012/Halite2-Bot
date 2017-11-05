@@ -9,7 +9,7 @@
 namespace hlt {
     struct Metadata {
         const PlayerId player_id;
-        Map initial_map;
+        Map* initial_map;
     };
 
     /// Initialize our bot with the given name, getting back some metadata.

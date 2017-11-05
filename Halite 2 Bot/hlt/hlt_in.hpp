@@ -114,13 +114,13 @@ namespace hlt {
 			return std::make_pair(planet.entity_id, planet);
 		}
 
-		static Map parse_map(const std::string& input, const int map_width, const int map_height, hlt::PlayerId a_PlayerID, Map* a_Map) {
+		static Map* parse_map(const std::string& input, const int map_width, const int map_height, hlt::PlayerId a_PlayerID, Map* a_Map) {
 			std::stringstream iss(input);
 
 			int num_players;
 			iss >> num_players;
 
-			Map map = Map(map_width, map_height, a_PlayerID);
+			Map* map =new Map(map_width, map_height, a_PlayerID);
 
 			for (int i = 0; i < num_players; ++i) {
 				PlayerId player_id;
@@ -132,8 +132,8 @@ namespace hlt {
 				unsigned int num_ships;
 				iss >> num_ships;
 
-				std::vector<Ship>& ship_vec = map.ships[player_id];
-				entity_map<unsigned int>& ship_map = map.ship_map[player_id];
+				std::vector<Ship>& ship_vec = map->ships[player_id];
+				entity_map<unsigned int>& ship_map = map->ship_map[player_id];
 
 				ship_vec.reserve(num_ships);
 				for (unsigned int j = 0; j < num_ships; ++j) {
@@ -146,18 +146,18 @@ namespace hlt {
 			unsigned int num_planets;
 			iss >> num_planets;
 
-			map.planets.reserve(num_planets);
+			map->planets.reserve(num_planets);
 			for (unsigned int i = 0; i < num_planets; ++i) {
 				const auto& planet_pair = parse_planet(iss);
-				map.planets.push_back(planet_pair.second);
-				map.planet_map[planet_pair.first] = i;
+				map->planets.push_back(planet_pair.second);
+				map->planet_map[planet_pair.first] = i;
 			}
 
-			map.maploaded();
+			map->maploaded();
 			return map;
 		}
 
 		void setup(const std::string& bot_name, int map_width, int map_height);
-		const Map get_map(hlt::PlayerId a_PlayerID, Map* a_Map, std::chrono::steady_clock::time_point* a_TimeStart);
+		Map* get_map(hlt::PlayerId a_PlayerID, Map* a_Map, std::chrono::steady_clock::time_point* a_TimeStart);
 	}
 }

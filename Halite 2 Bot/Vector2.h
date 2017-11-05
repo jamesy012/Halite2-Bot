@@ -10,9 +10,10 @@ public:
 
 	Vector2 operator=(const Vector2& a_Rhs);
 
-	const Vector2 operator*(const double& a_Rhs)const;
-	const Vector2 operator/(const double& a_Rhs)const;
-	const Vector2 operator+(const Vector2& a_Rhs)const;
+	Vector2 operator*(const double& a_Rhs)const;
+	Vector2 operator/(const double& a_Rhs)const;
+	Vector2 operator+(const Vector2& a_Rhs)const;
+	Vector2 operator-(const Vector2& a_Rhs)const;
 	friend Vector2& operator*=(Vector2& a_Lhs, const double& a_Rhs);
 	friend Vector2& operator/=(Vector2& a_Lhs, const double& a_Rhs);
 	friend Vector2& operator+=(Vector2& a_Lhs, const Vector2& a_Rhs);

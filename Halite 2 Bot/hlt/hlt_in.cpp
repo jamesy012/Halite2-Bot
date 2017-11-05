@@ -17,7 +17,7 @@ namespace hlt {
             g_map_height = map_height;
         }
 
-        const Map get_map(hlt::PlayerId a_PlayerID, Map* a_Map, std::chrono::steady_clock::time_point* a_TimeStart) {
+        Map* get_map(hlt::PlayerId a_PlayerID, Map* a_Map, std::chrono::steady_clock::time_point* a_TimeStart) {
             if (g_turn == 1) {
                 out::send_string(g_bot_name);
             }

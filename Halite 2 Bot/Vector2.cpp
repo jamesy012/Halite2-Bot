@@ -18,16 +18,20 @@ Vector2 Vector2::operator=(const Vector2& a_Rhs) {
 	return *this;
 }
 
-const Vector2 Vector2::operator*(const double & a_Rhs)const {
+Vector2 Vector2::operator*(const double & a_Rhs)const {
 	return Vector2(m_X*a_Rhs, m_Y*a_Rhs);
 }
 
-const Vector2 Vector2::operator/(const double & a_Rhs)const {
+Vector2 Vector2::operator/(const double & a_Rhs)const {
 	return Vector2(m_X / a_Rhs, m_Y / a_Rhs);
 }
 
-const Vector2 Vector2::operator+(const Vector2 & a_Rhs)const {
-	return Vector2(m_X+a_Rhs.m_X,m_Y+a_Rhs.m_Y);
+Vector2 Vector2::operator+(const Vector2 & a_Rhs)const {
+	return Vector2(m_X + a_Rhs.m_X, m_Y + a_Rhs.m_Y);
+}
+
+Vector2 Vector2::operator-(const Vector2 & a_Rhs) const {
+	return Vector2(m_X - a_Rhs.m_X, m_Y - a_Rhs.m_Y);
 }
 
 Vector2::operator std::string() const {
