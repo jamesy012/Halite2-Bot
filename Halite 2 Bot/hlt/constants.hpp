@@ -57,7 +57,7 @@ namespace hlt {
 		constexpr double MIN_DISTANCE_FOR_CLOSEST_POINT = 3;
 
 
-		constexpr double SHIP_PREDICTED_MOVE_AVOIDANCE_RADIUS = 2;
+		constexpr double SHIP_PREDICTED_MOVE_AVOIDANCE_RADIUS = 1;
 
 		constexpr double DISTANCE_FOR_USED_OBJECT = 9999;
 		constexpr double DISTANCE_FOR_SAME_OBJECT = DISTANCE_FOR_USED_OBJECT - 1;

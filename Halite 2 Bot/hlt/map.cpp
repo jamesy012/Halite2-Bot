@@ -96,6 +96,7 @@ namespace hlt {
 				addDistEntityShips(ship);
 			}
 		}
+
 		auto t2 = std::chrono::high_resolution_clock::now();
 		auto diff = std::chrono::duration_cast<std::chrono::duration<double>>(t2 - t1);
 		hlt::Log::log("Ships Time: " + std::to_string(1000 * diff.count()));

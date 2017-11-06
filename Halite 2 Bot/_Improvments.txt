@@ -10,8 +10,8 @@ Improvments to make:
 
 -	attack near by enemy ships (!DONE)
 
--	only send enough ships to an area that it needs (!ONLY DONE FOR DOCKING SPOTS)
-	-	say 4 enemys docked to a planet, 3 more enemies nearby that can dock 5, then send (5-4)+(3+1*2) == (dock_Spots-docked)+((enemysNearby-docked+1)*2) (!RATIO VALUE IN map.cpp)
+-	only send enough ships to an area that it needs
+	-	say 4 enemys docked to a planet, 3 more enemies nearby that can dock 5, then send (5-4)+(3+1*2) == (dock_Spots-docked)+((enemysNearby-docked+1)*2)
 
 -	look to see if there are more undocked enemies nearby
 	-	if there are, flee and call for help
@@ -36,3 +36,5 @@ Improvments to make:
 -	When moving ships, check to see if there will be a ship in that location by checking the moves
 
 -	a*
+
+-	Improve Navigation

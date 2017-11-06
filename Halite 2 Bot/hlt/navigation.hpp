@@ -121,7 +121,7 @@ namespace hlt {
 				Vector2 posNextTurn = ship.location.m_Pos;
 
 				Map::MovePositions mp;
-				for (int i = 1; i <= 4; i++) {
+				for (int i = 1; i <= thrust; i++) {
 					mp = { posNextTurn * thrust/i, &ship };
 					map.m_MovePositions.push_back(mp);
 				}
@@ -135,15 +135,16 @@ namespace hlt {
 		static possibly<Move> navigate_ship_to_dock(
 			Map& map,
 			Ship& ship,
-			const Entity& dock_target,
-			const int max_thrust) {
-			const int max_corrections = constants::MAX_NAVIGATION_CORRECTIONS;
-			const bool avoid_obstacles = true;
-			const double angular_step_rad = M_PI / 180.0;
-			const Location& target = ship.location.get_closest_point(dock_target.location, dock_target.radius);
+			Entity& dock_target,
+			int max_thrust) {
+			int max_corrections = constants::MAX_NAVIGATION_CORRECTIONS;
+			bool avoid_obstacles = true;
+			double angular_step_rad = M_PI / 180.0;
+			Location target = ship.location.get_closest_point(dock_target.location, dock_target.radius);
 
 			return navigate_ship_towards_target(
 				map, ship, target, max_thrust, avoid_obstacles, max_corrections, angular_step_rad);
 		}
+
 	}
 }

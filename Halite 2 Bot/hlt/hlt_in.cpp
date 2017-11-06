@@ -2,7 +2,7 @@
 #include "log.hpp"
 #include "hlt_out.hpp"
 
-
+#include "../Defines.h"
 
 namespace hlt {
     namespace in {
@@ -29,9 +29,11 @@ namespace hlt {
                 std::exit(0);
             }
 
+#ifndef READY_FOR_BUILD
 			if (a_TimeStart != nullptr) {
 				*a_TimeStart = std::chrono::high_resolution_clock::now();
 			}
+#endif
 
             if (g_turn == 0) {
                 Log::log("--- PRE-GAME ---");

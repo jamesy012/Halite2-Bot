@@ -20,8 +20,8 @@ namespace hlt {
 			double m_Distance;
 		};
 
-		DistEntity Entity::getDistEntity(Entity* a_Entity) const {
-			DistEntity et;
+		Entity::DistEntity getDistEntity(Entity* a_Entity) const {
+			Entity::DistEntity et;
 			et.m_Entity = a_Entity;
 			et.m_Distance = location.get_distance_to(a_Entity->location);
 			return et;
