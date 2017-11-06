@@ -38,3 +38,5 @@ Improvments to make:
 -	a*
 
 -	Improve Navigation
+
+-	Navigation avoidance, dont bother looking at the MovePoints if that ship is going in the same direction as yours

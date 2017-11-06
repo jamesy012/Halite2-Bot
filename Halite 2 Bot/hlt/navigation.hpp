@@ -110,23 +110,26 @@ namespace hlt {
 			} else {
 				thrust = max_thrust;
 			}
+			if(thrust == 0){
+				return { Move::noop(), false };
+			}
 
 			const int angle_deg = util::angle_rad_to_deg_clipped(angle_rad);
 
 
 			//calculating the postion this object will be after this 
 			//ONLY DO THIS IF WE HAVE LESS THEN NUM_OF_UNDOCKED_SHIPS_FOR_SHIP_MOVE_PREDICTION SHIPS
-			if (map.m_NumberOfFriendlyUndockedShips <= constants::NUM_OF_UNDOCKED_SHIPS_FOR_SHIP_MOVE_PREDICTION) {
+			if (map.m_NumberOfFriendlyUndockedShips <= constants::NUM_OF_UNDOCKED_SHIPS_FOR_SHIP_MOVE_PREDICTION /* && map.m_TurnNum >= 3 */) {
 				Vector2 direction = (target.m_Pos - ship.location.m_Pos).normalized() * thrust;
 				Vector2 posNextTurn = ship.location.m_Pos;
 
 				Map::MovePositions mp;
-				for (int i = 1; i <= thrust; i++) {
-					mp = { posNextTurn * thrust/i, &ship };
+				for (int i = 2; i <= thrust; i++) {
+					mp = { posNextTurn + direction * (i/(double)thrust), &ship };
 					map.m_MovePositions.push_back(mp);
 				}
 
-				//Log::log("Move prediction: " + std::to_string(ship.entity_id) + " " + std::string(ship.location.m_Pos) + " " + std::string(direction) + " " + std::string(posNextTurn));
+				//Log::log("Move prediction: " + std::to_string(ship.entity_id) + " " + std::string(ship.location.m_Pos) + " " + std::string(direction) + " " + std::string(posNextTurn+direction));
 			}
 
 			return { Move::thrust(ship.entity_id, thrust, angle_deg), true };
@@ -139,7 +142,7 @@ namespace hlt {
 			int max_thrust) {
 			int max_corrections = constants::MAX_NAVIGATION_CORRECTIONS;
 			bool avoid_obstacles = true;
-			double angular_step_rad = M_PI / 180.0;
+			double angular_step_rad = M_PI / 270.0;
 			Location target = ship.location.get_closest_point(dock_target.location, dock_target.radius);
 
 			return navigate_ship_towards_target(
