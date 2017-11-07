@@ -6,7 +6,7 @@
 #include <algorithm>
 
 namespace hlt {
-	bool distEntitySort(Entity::DistEntity& a_Lhs, Entity::DistEntity& a_Rhs) { return (a_Lhs.m_Distance<a_Rhs.m_Distance); }
+	
 
 	Map::Map(const int width, const int height, hlt::PlayerId a_PlayerID) : map_width(width), map_height(height), m_PlayerID(a_PlayerID) {
 
@@ -151,7 +151,7 @@ namespace hlt {
 			}
 		}
 
-		std::sort(shipDeList.begin(), shipDeList.end(), distEntitySort);
+		std::sort(shipDeList.begin(), shipDeList.end(),	Entity::distEntitySort);
 		//a_Entity->m_ShipsByDistance.insert(a_Entity->m_ShipsByDistance.end(), sortedList.begin(), sortedList.end());
 
 		a_Entity->m_FriendlyShipsByDistance.resize(m_NumberOfFriendlyShips);
@@ -184,7 +184,7 @@ namespace hlt {
 			planetDeList[q] = de;
 		}
 
-		std::sort(planetDeList.begin(), planetDeList.end(), distEntitySort);
+		std::sort(planetDeList.begin(), planetDeList.end(), Entity::distEntitySort);
 
 		a_Entity->m_FriendlyPlanetsByDistance.resize(m_NumberOfFriendlyPlanets);
 		a_Entity->m_EnemyPlanetsByDistance.resize(m_NumberOfEnemyPlanets);

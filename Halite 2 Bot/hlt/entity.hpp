@@ -27,6 +27,8 @@ namespace hlt {
 			return et;
 		}
 
+		static bool distEntitySort(Entity::DistEntity& a_Lhs, Entity::DistEntity& a_Rhs) { return (a_Lhs.m_Distance<a_Rhs.m_Distance); }
+
 		std::vector<DistEntity> m_EnemyShipsByDistance;
 		std::vector<DistEntity> m_FriendlyShipsByDistance;
 		std::vector<DistEntity> m_ShipsByDistance;

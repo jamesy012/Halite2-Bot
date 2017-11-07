@@ -36,6 +36,8 @@ namespace hlt {
 
 		unsigned int m_TurnNum = 0;
 
+		hlt::PlayerId m_PlayerID;
+
 		Map(int width, int height, hlt::PlayerId a_PlayerID);
 		void maploaded();
 
@@ -48,7 +50,6 @@ namespace hlt {
 	protected:
 		
 	private:
-		hlt::PlayerId m_PlayerID;
 	
 		void setUpEntityVectorCapacitys(hlt::Entity* a_Entity) const;
 		void addDistEntityShips(hlt::Entity* a_Entity,bool a_SkipDocked = false);
