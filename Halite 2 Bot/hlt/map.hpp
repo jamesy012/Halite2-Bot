@@ -13,6 +13,9 @@ namespace hlt {
 		std::unordered_map<PlayerId, std::vector<Ship>> ships;
 		std::unordered_map<PlayerId, entity_map<unsigned int>> ship_map;
 
+		std::vector<Ship*> m_ListOfShips;
+
+
 		std::vector<Planet> planets;
 		entity_map<unsigned int> planet_map;
 

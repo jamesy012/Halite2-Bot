@@ -1,5 +1,7 @@
 #include "Vector2.h"
 
+#include "hlt\util.hpp"
+
 #include <cmath>
 #include <ostream>
 #include <string>
@@ -41,16 +43,39 @@ Vector2::operator std::string() const {
 	return text;
 }
 
+Vector2 Vector2::rotateAroundPoint(Vector2 a_Point, double a_Degrees) {
+	float angle = (a_Degrees * M_PI) / 180;
+	float s = sin(angle);
+	float c = cos(angle);
+
+	Vector2 result = *this - a_Point;
+
+	// rotate point
+	float xnew = result.m_X * c - result.m_Y * s;
+	float ynew = result.m_X * s + result.m_Y * c;
+
+	// translate point back:
+	result.m_X = xnew + a_Point.m_X;
+	result.m_Y = ynew + a_Point.m_Y;
+
+	return result;
+}
+
 void Vector2::normalize() {
-	double length = sqrt(m_X*m_X + m_Y*m_Y);
-	m_X /= length;
-	m_Y /= length;
+	double vLength = length();
+	m_X /= vLength;
+	m_Y /= vLength;
 }
 
 Vector2 Vector2::normalized() {
 	Vector2 vector(m_X, m_Y);
 	vector.normalize();
 	return vector;
+}
+
+double Vector2::length() {
+	return sqrt(m_X*m_X + m_Y*m_Y);
+
 }
 
 Vector2 & operator*=(Vector2 & a_Lhs, const double & a_Rhs) {

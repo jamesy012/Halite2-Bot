@@ -40,3 +40,8 @@ Improvments to make:
 -	Improve Navigation
 
 -	Navigation avoidance, dont bother looking at the MovePoints if that ship is going in the same direction as yours
+
+-	rewrite how the ships get their targets, retain last frames target
+	-	Manager will tell the ship what to do based on target and State
+		-	State could be Attack/Defend/Dock
+	-	will allow group attack to be managed easier

@@ -60,6 +60,8 @@ namespace hlt {
 			*/
 		}
 
+		m_ListOfShips = std::vector<Ship*>(m_NumberOfShips);
+
 		auto t1 = std::chrono::high_resolution_clock::now();
 		
 		//Set up DistEntity data for all planets
@@ -75,13 +77,14 @@ namespace hlt {
 		}
 		
 
-
+		int shipIndex = -1;
 		//Set up DistEntity data for all ships
 		for (unsigned int i = 0; i < ship_map.size(); i++) {
 			//do ship DistEntity data
 			//go through all ships for this player
 			for (unsigned int q = 0; q < ship_map.at(i).size(); q++) {
 				hlt::Ship* ship = &ships.at(i).at(q);
+				m_ListOfShips[++shipIndex] = ship;
 				//skip docked
 				if (ship->docking_status != ShipDockingStatus::Undocked) {
 					continue;

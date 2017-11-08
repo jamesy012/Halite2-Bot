@@ -22,8 +22,12 @@ public:
 	friend std::ostream& operator<<(std::ostream &a_Out, Vector2& a_Vector);
 	operator std::string() const;
 
+	Vector2 rotateAroundPoint(Vector2 a_Point, double a_Degrees);
+
 	void normalize();
 	Vector2 normalized();
+
+	double length();
 
 	double m_X,m_Y;
 };
