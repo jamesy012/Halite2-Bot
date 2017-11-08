@@ -1,6 +1,6 @@
 #include "Vector2.h"
 
-#include "hlt\util.hpp"
+#include "hlt/util.hpp"
 
 #include <cmath>
 #include <ostream>

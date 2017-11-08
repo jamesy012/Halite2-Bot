@@ -1,11 +1,11 @@
 #include "AStar.h"
 
-#include "hlt\map.hpp"
-#include "hlt\entity.hpp"
-#include "hlt\log.hpp"
+#include "hlt/map.hpp"
+#include "hlt/entity.hpp"
+#include "hlt/log.hpp"
 
-#include "hlt\entity.hpp"
-#include "hlt\planet.hpp"
+#include "hlt/entity.hpp"
+#include "hlt/planet.hpp"
 
 #include <queue>
 #include <sstream>

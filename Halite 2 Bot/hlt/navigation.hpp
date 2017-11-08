@@ -7,7 +7,7 @@
 
 #include "../Defines.h"
 #include "../Vector2.h"
-#ifndef USEASTAR
+#ifdef USEASTAR
 #include "../AStar.h"
 #endif // !USEASTAR
 
@@ -158,7 +158,7 @@ namespace hlt {
 		}
 
 
-#ifndef USEASTAR
+#ifdef USEASTAR
 		static possibly<Move> aStarNavigate(AStar* a_AStarMap, Ship* a_Ship, Location* a_Target) {
 			double distance = a_Ship->location.get_distance_to(*a_Target);
 			if (distance <= 2) {

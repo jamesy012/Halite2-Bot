@@ -1,6 +1,6 @@
 #pragma once
 
-//#define READY_FOR_BUILD
-#define LOGGING
-#define USEASTAR
+#define READY_FOR_BUILD
+//#define LOGGING
+//#define USEASTAR
 
