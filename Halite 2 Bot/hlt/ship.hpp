@@ -4,6 +4,8 @@
 #include "types.hpp"
 #include "planet.hpp"
 
+#include "move.hpp"
+
 namespace hlt {
     /// The states a ship can be in regarding docking.
     enum class ShipDockingStatus {
@@ -33,5 +35,11 @@ namespace hlt {
         bool can_dock(const Planet& planet) const {
             return location.get_distance_to(planet.location) <= (constants::DOCK_RADIUS + planet.radius);
         }
+
+
+
+		hlt::Move m_Move;
+		hlt::Entity* m_MoveTarget = nullptr;
+		bool m_IsTargetAShip = true;
     };
 }

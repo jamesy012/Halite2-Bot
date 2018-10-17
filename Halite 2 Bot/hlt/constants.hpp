@@ -48,7 +48,8 @@ namespace hlt {
 		// Implementation-specific constants
 
 		constexpr double FORECAST_FUDGE_FACTOR = SHIP_RADIUS + 0.2;
-		constexpr int MAX_NAVIGATION_CORRECTIONS = 40;
+		constexpr int MAX_NAVIGATION_CORRECTIONS = 50;
+
 
 		/**
 		 * Used in Location::get_closest_point()

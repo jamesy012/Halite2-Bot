@@ -36,6 +36,9 @@
     <ClCompile Include="AStar.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="ShipBehaviours.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="hlt\collision.hpp">
@@ -90,6 +93,9 @@
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="AStar.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="ShipBehaviours.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>

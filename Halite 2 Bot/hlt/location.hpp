@@ -38,6 +38,21 @@ namespace hlt {
             return { Vector2(x, y) };
         }
 
+		Location get_closest_point_if_in_range(Location& target, const double target_radius, const float min_range) const {
+			const double distance = get_distance_to(target);
+			if (distance > min_range) {
+				const double radius = target_radius + constants::MIN_DISTANCE_FOR_CLOSEST_POINT;
+				const double angle_rad = target.orient_towards_in_rad(*this);
+
+				const double x = target.m_Pos.m_X + radius * std::cos(angle_rad);
+				const double y = target.m_Pos.m_Y + radius * std::sin(angle_rad);
+
+				return { Vector2(x, y) };
+			} else {
+				return target;
+			}
+		}
+
         friend std::ostream& operator<<(std::ostream& out, const Location& location);
     };
 

@@ -39,38 +39,20 @@ namespace hlt {
 			ship.owner_id = owner_id;
 			ship.radius = constants::SHIP_RADIUS;
 
-			/*
 			//calc shipVelocity
-			if (a_Map != nullptr) {
-				//if this in not a new ship
-				hlt::Log::log(std::to_string(ship.entity_id) + " VEL!");
+			if (a_Map != nullptr && ship.docking_status == ShipDockingStatus::Undocked) {
 
-					hlt::Log::log("a_Map->ships[owner_id].size() " + std::to_string(a_Map->ships[owner_id].size()) + " a_ShipIndex" + std::to_string(a_ShipIndex));
-				if (a_Map->ships[owner_id].size() > a_ShipIndex) {
+				auto shipLastTurn = a_Map->ship_map.at(owner_id).find(ship.entity_id);
 
-					if (a_Map->ship_map.at(owner_id).at(ship.entity_id) > a_ShipIndex) {
-					hlt::Log::log("start");
-
-						Ship* thisShipLastTurn = &a_Map->get_ship(owner_id, ship.entity_id);
-						hlt::Log::log("got ship");
-
-						if (thisShipLastTurn == nullptr) {
-							ship.m_VelX = ship.m_VelY = 0;
-						} else {
-							ship.m_VelX = ship.location.m_Pos.m_X - thisShipLastTurn->location.m_Pos.m_X;
-							ship.m_VelY = ship.location.m_Pos.m_Y - thisShipLastTurn->location.m_Pos.m_Y;
-
-							hlt::Log::log("vel y " + std::to_string(ship.m_VelX));
-							hlt::Log::log("vel x " + std::to_string(ship.m_VelY));
-							//if (ship.m_VelX > 200) {
-							//	a_Map->ships[999].size();
-							//	ship.m_VelX = ship.m_VelY = 0;
-							//}
-						}
-					}
+				if (shipLastTurn == a_Map->ship_map.at(owner_id).end()) {
+					ship.m_VelX = ship.m_VelY = 0;
+				} else {
+					Ship* thisShipLastTurn = &a_Map->ships.at(owner_id).at(shipLastTurn->second);
+					ship.m_VelX = ship.location.m_Pos.m_X - thisShipLastTurn->location.m_Pos.m_X;
+					ship.m_VelY = ship.location.m_Pos.m_Y - thisShipLastTurn->location.m_Pos.m_Y;
 				}
 			}
-			*/
+
 
 			return std::make_pair(ship.entity_id, ship);
 		}
@@ -120,7 +102,7 @@ namespace hlt {
 			int num_players;
 			iss >> num_players;
 
-			Map* map =new Map(map_width, map_height, a_PlayerID);
+			Map* map = new Map(map_width, map_height, a_PlayerID);
 
 			for (int i = 0; i < num_players; ++i) {
 				PlayerId player_id;
@@ -137,7 +119,7 @@ namespace hlt {
 
 				ship_vec.reserve(num_ships);
 				for (unsigned int j = 0; j < num_ships; ++j) {
-					const auto& ship_pair = parse_ship(iss, player_id,j, a_Map);
+					const auto& ship_pair = parse_ship(iss, player_id, j, a_Map);
 					ship_vec.push_back(ship_pair.second);
 					ship_map[ship_pair.first] = j;
 				}

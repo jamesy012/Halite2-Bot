@@ -124,19 +124,23 @@ namespace hlt {
 
 			const int angle_deg = util::angle_rad_to_deg_clipped(angle_rad);
 
+			Vector2 newPos;
+			newPos.m_X = thrust * cos(angle_rad);
+			newPos.m_Y = thrust * sin(angle_rad);
+			
+			//map.m_MovePositions.push_back({ship.location.m_Pos + newPos, &ship});
+			//Log::log("Move prediction: " + std::to_string(ship.entity_id) + " " + std::string(ship.location.m_Pos) + " (" + std::to_string(newPos.m_X) + "," + std::to_string(newPos.m_Y) + ")");
 
-			//calculating the postion this object will be after this 
-			//ONLY DO THIS IF WE HAVE LESS THEN NUM_OF_UNDOCKED_SHIPS_FOR_SHIP_MOVE_PREDICTION SHIPS
+			////calculating the postion this object will be after this 
+			////ONLY DO THIS IF WE HAVE LESS THEN NUM_OF_UNDOCKED_SHIPS_FOR_SHIP_MOVE_PREDICTION SHIPS
 			if (map.m_NumberOfFriendlyUndockedShips <= constants::NUM_OF_UNDOCKED_SHIPS_FOR_SHIP_MOVE_PREDICTION) {
-				Vector2 direction = (target.m_Pos - ship.location.m_Pos).normalized() * thrust;
-				Vector2 posNextTurn = ship.location.m_Pos;
-
+			
 				Map::MovePositions mp;
-				for (int i = 2; i <= thrust; i++) {
-					mp = { posNextTurn + direction * (i / (double) thrust), &ship };
+				for (int i = 2; i <= thrust; i+=2) {
+					mp = { ship.location.m_Pos + newPos * (i / (double) thrust), &ship };
 					map.m_MovePositions.push_back(mp);
 				}
-
+			
 				//Log::log("Move prediction: " + std::to_string(ship.entity_id) + " " + std::string(ship.location.m_Pos) + " " + std::string(direction) + " " + std::string(posNextTurn+direction));
 			}
 

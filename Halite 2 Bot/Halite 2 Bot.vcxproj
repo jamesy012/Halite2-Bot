@@ -22,7 +22,7 @@
     <VCProjectVersion>15.0</VCProjectVersion>
     <ProjectGuid>{A9B362B8-3226-475A-91EB-31762025E73D}</ProjectGuid>
     <RootNamespace>Halite2Bot</RootNamespace>
-    <WindowsTargetPlatformVersion>10.0.15063.0</WindowsTargetPlatformVersion>
+    <WindowsTargetPlatformVersion>10.0.16299.0</WindowsTargetPlatformVersion>
   </PropertyGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.Default.props" />
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'" Label="Configuration">
@@ -133,6 +133,7 @@
     <ClCompile Include="hlt\location.cpp" />
     <ClCompile Include="hlt\map.cpp" />
     <ClCompile Include="MyBot.cpp" />
+    <ClCompile Include="ShipBehaviours.cpp" />
     <ClCompile Include="Vector2.cpp" />
   </ItemGroup>
   <ItemGroup>
@@ -153,6 +154,7 @@
     <ClInclude Include="hlt\ship.hpp" />
     <ClInclude Include="hlt\types.hpp" />
     <ClInclude Include="hlt\util.hpp" />
+    <ClInclude Include="ShipBehaviours.h" />
     <ClInclude Include="Vector2.h" />
   </ItemGroup>
   <ItemGroup>

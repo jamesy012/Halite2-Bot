@@ -33,4 +33,5 @@
 .vs/
 IntermediateDir/
 Halite 2 Bot/Halite 2 Bot.zip
-Halite 2 Bot/MyBot.cpp
+Halite 2 Bot/x64/
+x64/

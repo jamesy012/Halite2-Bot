@@ -6,7 +6,7 @@
 #include <algorithm>
 
 namespace hlt {
-	
+
 
 	Map::Map(const int width, const int height, hlt::PlayerId a_PlayerID) : map_width(width), map_height(height), m_PlayerID(a_PlayerID) {
 
@@ -38,9 +38,11 @@ namespace hlt {
 				m_NumberOfFriendlyPlanets++;
 			} else {
 				m_NumberOfEnemyPlanets++;
+
 			}
 			m_NumberOfPlanets++;
 			planets[i].m_RequiredUnits = planets[i].docking_spots;
+			planets[i].m_UnitsGettingSentTo = planets[i].docked_ships.size();
 			//todo:: move elsewhere, since now we cant get ships by distance right now
 			/*
 			auto enemysNearBy = getEnemyShipsByDistance(planets[i]);
@@ -48,12 +50,12 @@ namespace hlt {
 				if (enemysNearBy[q] == nullptr) {
 					continue;
 				}
-				
+
 				//double dist = planets[i].location.get_distance_to(enemysNearBy[q]->location);
 				//if (dist <= planets[i].radius + 10) {
 				//	planets[i].m_EnemiesNearBy++;
 				//}
-				
+
 			}
 			planets[i].m_RequiredUnits = planets[i].docking_spots + (int) ceil(planets[i].m_EnemiesNearBy * 1.5);
 			//Log::log(std::to_string(i) + " has required of " + std::to_string(planets[i].m_RequiredUnits) + " - " + std::to_string(planets[i].docking_spots) + " - " + std::to_string(planets[i].docked_ships.size()) + " - " + std::to_string(planets[i].m_EnemiesNearBy));
@@ -63,19 +65,23 @@ namespace hlt {
 		m_ListOfShips = std::vector<Ship*>(m_NumberOfShips);
 
 		auto t1 = std::chrono::high_resolution_clock::now();
-		
+
 		//Set up DistEntity data for all planets
 		for (unsigned int i = 0; i < planets.size(); i++) {
 			hlt::Planet* planet = &planets[i];
-		
+
+			if (planet->owner_id == m_PlayerID || !planet->owned) {
+				m_ListOfMyPlanets.push_back(planet);
+			}
+
 			//setUpEntityVectorCapacitys(planet);
-		
+
 			//no need to do distance between planets, this wont change..
 			//addDistEntityPlanets(planet);
-		
-			addDistEntityShips(planet,true);
+
+			addDistEntityShips(planet, true);
 		}
-		
+
 
 		int shipIndex = -1;
 		//Set up DistEntity data for all ships
@@ -88,6 +94,12 @@ namespace hlt {
 				//skip docked
 				if (ship->docking_status != ShipDockingStatus::Undocked) {
 					continue;
+				}
+
+				if (ship->owner_id == m_PlayerID) {
+					m_ListOfMyUndockedShips.push_back(ship);
+				} else {
+					m_MovePositions.push_back({ {ship->location.m_Pos + Vector2{ship->m_VelX, ship->m_VelY} } , ship });
 				}
 
 				//setUpEntityVectorCapacitys(ship);
@@ -154,7 +166,8 @@ namespace hlt {
 			}
 		}
 
-		std::sort(shipDeList.begin(), shipDeList.end(),	Entity::distEntitySort);
+		std::random_shuffle(shipDeList.begin(), shipDeList.end());
+		std::sort(shipDeList.begin(), shipDeList.end(), Entity::distEntitySort);
 		//a_Entity->m_ShipsByDistance.insert(a_Entity->m_ShipsByDistance.end(), sortedList.begin(), sortedList.end());
 
 		a_Entity->m_FriendlyShipsByDistance.resize(m_NumberOfFriendlyShips);
@@ -178,7 +191,7 @@ namespace hlt {
 		for (unsigned int q = 0; q < planets.size(); q++) {
 			hlt::Planet* otherPlanet = &planets[q];
 			Entity::DistEntity de;
-				de.m_Entity = otherPlanet;
+			de.m_Entity = otherPlanet;
 			if (otherPlanet == a_Entity) {
 				de.m_Distance = constants::DISTANCE_FOR_SAME_OBJECT;
 			} else {
@@ -187,6 +200,7 @@ namespace hlt {
 			planetDeList[q] = de;
 		}
 
+		std::random_shuffle(planetDeList.begin(), planetDeList.end());
 		std::sort(planetDeList.begin(), planetDeList.end(), Entity::distEntitySort);
 
 		a_Entity->m_FriendlyPlanetsByDistance.resize(m_NumberOfFriendlyPlanets);
